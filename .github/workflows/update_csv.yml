@@ -7,7 +7,7 @@ on:
 jobs:
   update-csv:
     # On déclenche le job uniquement si l'issue comporte le label "feedback"
-    if: contains(github.event.issue.labels.*.name, 'feedback')
+    if: contains(github.event.issue.title, '[Feedback]')
     runs-on: ubuntu-latest
 
     steps:
