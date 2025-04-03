@@ -6,7 +6,7 @@ on:
 
 jobs:
   update-csv:
-    # On déclenche le job uniquement si l'issue comporte le label "feedback"
+    # On déclenche le job si le titre contient "[Feedback]"
     if: contains(github.event.issue.title, '[Feedback]')
     runs-on: ubuntu-latest
 
@@ -21,27 +21,26 @@ jobs:
           # Sauvegarde du corps de l'issue dans un fichier temporaire
           echo "${{ github.event.issue.body }}" > issue_body.txt
 
-          # Extraction des champs tels que présentés dans l'issue.
-          # On utilise "cut -d':' -f2-" pour récupérer tout après le premier deux-points,
-          # puis "xargs" pour supprimer les espaces superflus.
-          session_date=$(grep -i "^session_date" issue_body.txt | cut -d':' -f2- | xargs)
-          presence=$(grep -i "^presence" issue_body.txt | cut -d':' -f2- | xargs)
-          duree_heures=$(grep -i "^duree_heures" issue_body.txt | cut -d':' -f2- | xargs)
-          niko_niko=$(grep -i "^niko_niko" issue_body.txt | cut -d':' -f2- | xargs)
+          # Extraction en se basant sur le format Markdown généré par le formulaire.
+          # Pour chaque champ, on recherche la ligne commençant par l'en-tête et on récupère la première ligne non vide suivante.
+          session_date=$(awk '/^### session_date/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          presence=$(awk '/^### presence/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          duree_heures=$(awk '/^### duree_heures/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          niko_niko=$(awk '/^### niko_niko/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          
+          # Pour les champs avec notation, on récupère la partie après le tiret (par exemple, "Bon - 4" donnera "4")
+          fdbck_clarte_explications=$(awk '/^### fdbck_clarte_explications/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_utilite_concepts=$(awk '/^### fdbck_utilite_concepts/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_difficulte_percue=$(awk '/^### fdbck_difficulte_percue/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_impact_progression=$(awk '/^### fdbck_impact_progression/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_confiance_atteinte_objectif_professionnel=$(awk '/^### fdbck_confiance_atteinte_objectif_professionnel/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          
+          # Extraction des champs textuels
+          fdbck_suggestions_amelioration=$(awk '/^### fdbck_suggestions_amelioration/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          fdbck_ce_que_j_ai_prefere=$(awk '/^### fdbck_ce_que_j_ai_prefere/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          fdbck_commentaires_supplementaires=$(awk '/^### fdbck_commentaires_supplementaires/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
 
-          # Pour les champs de feedback notés, on extrait la partie numérique après le tiret.
-          fdbck_clarte_explications=$(grep -i "^fdbck_clarte_explications" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
-          fdbck_utilite_concepts=$(grep -i "^fdbck_utilite_concepts" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
-          fdbck_difficulte_percue=$(grep -i "^fdbck_difficulte_percue" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
-          fdbck_impact_progression=$(grep -i "^fdbck_impact_progression" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
-          fdbck_confiance_atteinte_objectif_professionnel=$(grep -i "^fdbck_confiance_atteinte_objectif_professionnel" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
-
-          # Extraction des champs textuels et autres
-          fdbck_suggestions_amelioration=$(grep -i "^fdbck_suggestions_amelioration" issue_body.txt | cut -d':' -f2- | xargs)
-          fdbck_ce_que_j_ai_prefere=$(grep -i "^fdbck_ce_que_j_ai_prefere" issue_body.txt | cut -d':' -f2- | xargs)
-          fdbck_commentaires_supplementaires=$(grep -i "^fdbck_commentaires_supplementaires" issue_body.txt | cut -d':' -f2- | xargs)
-
-          # Récupérer le login GitHub de l'auteur via github.actor
+          # Récupérer le login GitHub de l'auteur
           github_login="${{ github.actor }}"
 
           # Exporter les variables pour les étapes suivantes
