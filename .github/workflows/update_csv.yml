@@ -1,0 +1,76 @@
+name: Mise à jour du CSV de feedback
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-csv:
+    # On déclenche le job uniquement si l'issue comporte le label "feedback"
+    if: contains(github.event.issue.labels.*.name, 'feedback')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du repository
+        uses: actions/checkout@v3
+
+      - name: Extraire les données du formulaire
+        id: extract
+        shell: bash
+        run: |
+          # Sauvegarde du corps de l'issue dans un fichier temporaire
+          echo "${{ github.event.issue.body }}" > issue_body.txt
+
+          # Extraction des champs tels que présentés dans l'issue.
+          # On utilise "cut -d':' -f2-" pour récupérer tout après le premier deux-points,
+          # puis "xargs" pour supprimer les espaces superflus.
+          session_date=$(grep -i "^session_date" issue_body.txt | cut -d':' -f2- | xargs)
+          presence=$(grep -i "^presence" issue_body.txt | cut -d':' -f2- | xargs)
+          duree_heures=$(grep -i "^duree_heures" issue_body.txt | cut -d':' -f2- | xargs)
+          niko_niko=$(grep -i "^niko_niko" issue_body.txt | cut -d':' -f2- | xargs)
+
+          # Pour les champs de feedback notés, on extrait la partie numérique après le tiret.
+          fdbck_clarte_explications=$(grep -i "^fdbck_clarte_explications" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
+          fdbck_utilite_concepts=$(grep -i "^fdbck_utilite_concepts" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
+          fdbck_difficulte_percue=$(grep -i "^fdbck_difficulte_percue" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
+          fdbck_impact_progression=$(grep -i "^fdbck_impact_progression" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
+          fdbck_confiance_atteinte_objectif_professionnel=$(grep -i "^fdbck_confiance_atteinte_objectif_professionnel" issue_body.txt | cut -d':' -f2- | xargs | cut -d'-' -f2 | xargs)
+
+          # Extraction des champs textuels et autres
+          fdbck_suggestions_amelioration=$(grep -i "^fdbck_suggestions_amelioration" issue_body.txt | cut -d':' -f2- | xargs)
+          fdbck_ce_que_j_ai_prefere=$(grep -i "^fdbck_ce_que_j_ai_prefere" issue_body.txt | cut -d':' -f2- | xargs)
+          fdbck_commentaires_supplementaires=$(grep -i "^fdbck_commentaires_supplementaires" issue_body.txt | cut -d':' -f2- | xargs)
+
+          # Récupérer le login GitHub de l'auteur via github.actor
+          github_login="${{ github.actor }}"
+
+          # Exporter les variables pour les étapes suivantes
+          echo "session_date=${session_date}" >> $GITHUB_OUTPUT
+          echo "github_login=${github_login}" >> $GITHUB_OUTPUT
+          echo "presence=${presence}" >> $GITHUB_OUTPUT
+          echo "duree_heures=${duree_heures}" >> $GITHUB_OUTPUT
+          echo "niko_niko=${niko_niko}" >> $GITHUB_OUTPUT
+          echo "fdbck_clarte_explications=${fdbck_clarte_explications}" >> $GITHUB_OUTPUT
+          echo "fdbck_utilite_concepts=${fdbck_utilite_concepts}" >> $GITHUB_OUTPUT
+          echo "fdbck_difficulte_percue=${fdbck_difficulte_percue}" >> $GITHUB_OUTPUT
+          echo "fdbck_impact_progression=${fdbck_impact_progression}" >> $GITHUB_OUTPUT
+          echo "fdbck_confiance_atteinte_objectif_professionnel=${fdbck_confiance_atteinte_objectif_professionnel}" >> $GITHUB_OUTPUT
+          echo "fdbck_suggestions_amelioration=${fdbck_suggestions_amelioration}" >> $GITHUB_OUTPUT
+          echo "fdbck_ce_que_j_ai_prefere=${fdbck_ce_que_j_ai_prefere}" >> $GITHUB_OUTPUT
+          echo "fdbck_commentaires_supplementaires=${fdbck_commentaires_supplementaires}" >> $GITHUB_OUTPUT
+
+      - name: Ajouter la nouvelle ligne au CSV
+        run: |
+          # Construction de la nouvelle ligne CSV.
+          # Les champs textuels susceptibles de contenir des virgules sont entourés de guillemets.
+          newline="${{ steps.extract.outputs.session_date }},${{ steps.extract.outputs.github_login }},${{ steps.extract.outputs.presence }},${{ steps.extract.outputs.duree_heures }},${{ steps.extract.outputs.niko_niko }},${{ steps.extract.outputs.fdbck_clarte_explications }},${{ steps.extract.outputs.fdbck_utilite_concepts }},${{ steps.extract.outputs.fdbck_difficulte_percue }},\"${{ steps.extract.outputs.fdbck_suggestions_amelioration }}\",${{ steps.extract.outputs.fdbck_impact_progression }},${{ steps.extract.outputs.fdbck_confiance_atteinte_objectif_professionnel }},\"${{ steps.extract.outputs.fdbck_ce_que_j_ai_prefere }}\",\"${{ steps.extract.outputs.fdbck_commentaires_supplementaires }}\""
+          echo "Nouvelle ligne ajoutée : $newline"
+          echo "$newline" >> data/feedback_sessions.csv
+
+      - name: Commit et push des modifications
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/feedback_sessions.csv
+          git commit -m "Ajout d'une nouvelle session de feedback via Issue Form"
+          git push
