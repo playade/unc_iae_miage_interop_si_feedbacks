@@ -1,0 +1,75 @@
+name: Mise à jour du CSV de feedback
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-csv:
+    # On déclenche le job si le titre contient "[Feedback]"
+    if: contains(github.event.issue.title, '[Feedback]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du repository
+        uses: actions/checkout@v3
+
+      - name: Extraire les données du formulaire
+        id: extract
+        shell: bash
+        run: |
+          # Sauvegarde du corps de l'issue dans un fichier temporaire
+          echo "${{ github.event.issue.body }}" > issue_body.txt
+
+          # Extraction en se basant sur le format Markdown généré par le formulaire.
+          # Pour chaque champ, on recherche la ligne commençant par l'en-tête et on récupère la première ligne non vide suivante.
+          session_date=$(awk '/^### session_date/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          presence=$(awk '/^### presence/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          duree_heures=$(awk '/^### duree_heures/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          niko_niko=$(awk '/^### niko_niko/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          
+          # Pour les champs avec notation, on récupère la partie après le tiret (par exemple, "Bon - 4" donnera "4")
+          fdbck_clarte_explications=$(awk '/^### fdbck_clarte_explications/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_utilite_concepts=$(awk '/^### fdbck_utilite_concepts/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_difficulte_percue=$(awk '/^### fdbck_difficulte_percue/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_impact_progression=$(awk '/^### fdbck_impact_progression/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          fdbck_confiance_atteinte_objectif_professionnel=$(awk '/^### fdbck_confiance_atteinte_objectif_professionnel/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | cut -d'-' -f2 | xargs)
+          
+          # Extraction des champs textuels
+          fdbck_suggestions_amelioration=$(awk '/^### fdbck_suggestions_amelioration/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          fdbck_ce_que_j_ai_prefere=$(awk '/^### fdbck_ce_que_j_ai_prefere/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+          fdbck_commentaires_supplementaires=$(awk '/^### fdbck_commentaires_supplementaires/{getline; if($0 ~ /^$/){getline}; print}' issue_body.txt | xargs)
+
+          # Récupérer le login GitHub de l'auteur
+          github_login="${{ github.actor }}"
+
+          # Exporter les variables pour les étapes suivantes
+          echo "session_date=${session_date}" >> $GITHUB_OUTPUT
+          echo "github_login=${github_login}" >> $GITHUB_OUTPUT
+          echo "presence=${presence}" >> $GITHUB_OUTPUT
+          echo "duree_heures=${duree_heures}" >> $GITHUB_OUTPUT
+          echo "niko_niko=${niko_niko}" >> $GITHUB_OUTPUT
+          echo "fdbck_clarte_explications=${fdbck_clarte_explications}" >> $GITHUB_OUTPUT
+          echo "fdbck_utilite_concepts=${fdbck_utilite_concepts}" >> $GITHUB_OUTPUT
+          echo "fdbck_difficulte_percue=${fdbck_difficulte_percue}" >> $GITHUB_OUTPUT
+          echo "fdbck_impact_progression=${fdbck_impact_progression}" >> $GITHUB_OUTPUT
+          echo "fdbck_confiance_atteinte_objectif_professionnel=${fdbck_confiance_atteinte_objectif_professionnel}" >> $GITHUB_OUTPUT
+          echo "fdbck_suggestions_amelioration=${fdbck_suggestions_amelioration}" >> $GITHUB_OUTPUT
+          echo "fdbck_ce_que_j_ai_prefere=${fdbck_ce_que_j_ai_prefere}" >> $GITHUB_OUTPUT
+          echo "fdbck_commentaires_supplementaires=${fdbck_commentaires_supplementaires}" >> $GITHUB_OUTPUT
+
+      - name: Ajouter la nouvelle ligne au CSV
+        run: |
+          # Construction de la nouvelle ligne CSV.
+          # Les champs textuels susceptibles de contenir des virgules sont entourés de guillemets.
+          newline="${{ steps.extract.outputs.session_date }},${{ steps.extract.outputs.github_login }},${{ steps.extract.outputs.presence }},${{ steps.extract.outputs.duree_heures }},${{ steps.extract.outputs.niko_niko }},${{ steps.extract.outputs.fdbck_clarte_explications }},${{ steps.extract.outputs.fdbck_utilite_concepts }},${{ steps.extract.outputs.fdbck_difficulte_percue }},\"${{ steps.extract.outputs.fdbck_suggestions_amelioration }}\",${{ steps.extract.outputs.fdbck_impact_progression }},${{ steps.extract.outputs.fdbck_confiance_atteinte_objectif_professionnel }},\"${{ steps.extract.outputs.fdbck_ce_que_j_ai_prefere }}\",\"${{ steps.extract.outputs.fdbck_commentaires_supplementaires }}\""
+          echo "Nouvelle ligne ajoutée : $newline"
+          echo "$newline" >> data/feedback_sessions.csv
+
+      - name: Commit et push des modifications
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/feedback_sessions.csv
+          git commit -m "Ajout d'une nouvelle session de feedback via Issue Form"
+          git push

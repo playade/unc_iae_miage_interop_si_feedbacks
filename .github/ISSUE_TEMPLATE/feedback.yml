@@ -1,0 +1,120 @@
+name: Nouvelle session de feedback
+description: Remplissez ce formulaire pour ajouter une session de feedback dans le fichier CSV.
+title: "[Feedback] Nouvelle session - {{session_date}}"
+labels: [feedback]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "Veuillez renseigner les informations de la session de feedback. Ces données seront ajoutées dans le fichier CSV."
+  - type: input
+    id: session_date
+    attributes:
+      label: "session_date"
+      description: "Entrez la date au format AAAA-MM-JJ (ex: 2025-04-03)"
+      placeholder: "2025-04-03"
+  - type: dropdown
+    id: presence
+    attributes:
+      label: "presence"
+      description: "Sélectionnez la présence à cette session"
+      options:
+        - "ON_SITE"
+        - "REMOTE"
+        - "ABSENT"
+  - type: dropdown
+    id: duree_heures
+    attributes:
+      label: "duree_heures"
+      description: "Sélectionnez le nombre d'heures de la session"
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+  - type: dropdown
+    id: niko_niko
+    attributes:
+      label: "niko_niko"
+      description: "niko niko"
+      options:
+        - "VERT"
+        - "JAUNE"
+        - "ROUGE"
+  - type: dropdown
+    id: fdbck_clarte_explications
+    attributes:
+      label: "fdbck_clarte_explications"
+      description: "Sélectionnez une note de 1 à 5, où 1 est très mauvais et 5 est excellent."
+      options:
+        - "Très mauvais - 1"
+        - "Mauvais - 2"
+        - "Moyen - 3"
+        - "Bon - 4"
+        - "Excellent - 5"
+  - type: dropdown
+    id: fdbck_utilite_concepts
+    attributes:
+      label: "fdbck_utilite_concepts"
+      description: "Sélectionnez une note de 1 à 5, où 1 est très mauvais et 5 est excellent."
+      options:
+        - "Très mauvais - 1"
+        - "Mauvais - 2"
+        - "Moyen - 3"
+        - "Bon - 4"
+        - "Excellent - 5"
+  - type: dropdown
+    id: fdbck_difficulte_percue
+    attributes:
+      label: "fdbck_difficulte_percue"
+      description: "Sélectionnez une note de 1 à 5, où 1 est très mauvais et 5 est excellent."
+      options:
+        - "Très mauvais - 1"
+        - "Mauvais - 2"
+        - "Moyen - 3"
+        - "Bon - 4"
+        - "Excellent - 5"
+  - type: input
+    id: fdbck_suggestions_amelioration
+    attributes:
+      label: "fdbck_suggestions_amelioration"
+      description: "Entrez vos suggestions d'amélioration."
+      placeholder: "Entrez vos suggestions d'amélioration ici."
+  - type: dropdown
+    id: fdbck_impact_progression
+    attributes:
+      label: "fdbck_impact_progression"
+      description: "Sélectionnez une note de 1 à 5, où 1 est très mauvais et 5 est excellent."
+      options:
+        - "Très mauvais - 1"
+        - "Mauvais - 2"
+        - "Moyen - 3"
+        - "Bon - 4"
+        - "Excellent - 5"
+  - type: dropdown
+    id: fdbck_confiance_atteinte_objectif_professionnel
+    attributes:
+      label: "fdbck_confiance_atteinte_objectif_professionnel"
+      description: "Sélectionnez une note de 1 à 5, où 1 est très mauvais et 5 est excellent."
+      options:
+        - "Très mauvais - 1"
+        - "Mauvais - 2"
+        - "Moyen - 3"
+        - "Bon - 4"
+        - "Excellent - 5"
+  - type: input
+    id: fdbck_ce_que_j_ai_prefere
+    attributes:
+      label: "fdbck_ce_que_j_ai_prefere"
+      description: "Entrez ce que vous avez préféré."
+      placeholder: "Entrez ce que vous avez préféré ici."
+  - type: input
+    id: fdbck_commentaires_supplementaires
+    attributes:
+      label: "fdbck_commentaires_supplementaires"
+      description: "Entrez vos commentaires supplémentaires."
+      placeholder: "Entrez vos commentaires supplémentaires ici."
+
+
+
