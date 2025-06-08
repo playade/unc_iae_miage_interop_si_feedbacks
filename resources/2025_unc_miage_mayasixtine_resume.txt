@@ -1,0 +1,4 @@
+🚀 Plongez dans les coulisses du projet PRIX.NC avec la Team Data Prep !
+Découvrez comment nous avons structuré, enrichi et mis à jour les données de prix.nc. Un travail collaboratif mené via Kaggle et Microsoft Teams.
+Focus sur la gestion de projet et la préparation des datasets entreprises et historique.
+🎓 Présentation par Clémentine Galin, étudiante en Master MIAGE à l’UNC.
