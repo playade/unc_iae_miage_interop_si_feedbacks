@@ -1,0 +1,5 @@
+Plongez dans les coulisses du projet PRIX.NC 🔍
+Structuration, enrichissement et MAJ des données de prix.nc 📊
+Collaboration via Kaggle & Teams 🤝
+Focus sur la data prep des entreprises & historique 🛠️
+Présenté par Clémentine Galin 🎓
