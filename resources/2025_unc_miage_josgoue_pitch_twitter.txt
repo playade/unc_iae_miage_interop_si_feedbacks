@@ -1,0 +1,1 @@
+💡 Étudiant en Master MIAGE à l’UNC, j’ai contribué au projet PRIX.NC 📊 : collecte, croisement et structuration des données produits 🇳🇨 avec OpenFoodFacts. Objectif : mieux comprendre la "vie chère" via la data. #DataPrep #Kaggle #DuckDB #Interopérabilité #OpenData
