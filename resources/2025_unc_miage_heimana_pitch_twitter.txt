@@ -1,3 +1,5 @@
 Analyse des paniers Prix.nc 🛒 : quels produits, quels profils, quels usages ? 
+Ce notebook analyse les paniers d'achat à partir d'une base DuckDB.
+Il explore leurs usages et dynamiques, et cartographie les liens entre produits via Gephi. Une approche mêlant stats, visualisation et analyse réseau.
 Grâce aux données DuckDB, on décrypte comportements & tendances d'achat en Nouvelle-Calédonie. 
-#OpenData #DataPrep #PrixNC
+#OpenData #DataPrep #PrixNC #DataScience #Gephi
