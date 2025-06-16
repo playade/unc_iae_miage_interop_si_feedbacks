@@ -1,0 +1,3 @@
+Analyse des paniers Prix.nc 🛒 : quels produits, quels profils, quels usages ? 
+Grâce aux données DuckDB, on décrypte comportements & tendances d'achat en Nouvelle-Calédonie. 
+#OpenData #DataPrep #PrixNC
