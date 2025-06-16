@@ -1,0 +1,3 @@
+Ce notebook explore les paniers d'achat du site Prix.nc à partir d'une base DuckDB. 
+L’analyse porte sur la structure, l’usage et la variété des paniers, ainsi que sur les dynamiques liées à leur création et utilisation.
+Une analyse réseau avec Gephi met en évidence les liens entre produits fréquemment achetés ensemble, révélant des clusters de consommation. L’approche combine statistiques descriptives, visualisations Python et cartographie relationnelle via Gephi.
