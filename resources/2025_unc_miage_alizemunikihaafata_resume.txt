@@ -1,0 +1,4 @@
+🎬 Cette vidéo, réalisée dans le cadre du projet PRIX.NC en formation MIAGE, se concentre sur l’analyse des paniers d’achat du site public calédonien Prix.nc.
+Elle retrace le travail de la Team Data Prep, dédié à la collecte, au nettoyage et à la structuration de ces données via l’API et la documentation Swagger.
+L’accent est mis sur les bonnes pratiques de data engineering et la préparation de jeux de données fiables.
+Cette base a ensuite permis des visualisations exploratoires, menées par Julian Malaval avec Gephi.
