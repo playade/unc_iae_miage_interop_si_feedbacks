@@ -1,0 +1,8 @@
+Plongez dans les coulisses du projet PRIX.NC avec la Team Data Prep !
+Dans le cadre de notre formation MIAGE, nous avons collecté, nettoyé et structuré les données du site Prix.nc, avec un focus particulier sur les paniers créés par les utilisateurs pour comparer les prix.
+Requêtes GET, conversion de JSON en DataFrame : chaque étape a été pensée pour assurer la qualité, l’interopérabilité et la réutilisabilité des données, publiées dans des formats standards tels que CSV, JSON et Parquet.
+
+Ce travail collaboratif a posé une base solide pour l’analyse des comportements d’achat.
+
+Présentation réalisée par Alizée Munikihaafata, étudiante en Master MIAGE à l’UNC.
+#DataPrep #API #PaniersPrixNC #OpenData #MIAGE #Interopérabilité
