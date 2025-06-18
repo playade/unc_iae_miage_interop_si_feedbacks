@@ -1,0 +1,5 @@
+📦 Bienvenue dans le projet prix.nc, réalisé par la team DataPrep dans le cadre du Master MIAGE !
+⚙️ Collecte, nettoyage, structuration vers un dataset clair, fiable et exploitable
+📊 Au programme : Python, DuckDB, notebooks intelligents et ajustements métiers sur mesure.
+🤝 Collaboration, rigueur, et réponses concrètes aux besoins des utilisateurs.
+🎓 Présenté par Cassandra Lamataki
