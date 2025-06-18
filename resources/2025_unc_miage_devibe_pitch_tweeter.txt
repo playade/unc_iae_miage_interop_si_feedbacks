@@ -1,0 +1,6 @@
+Un projet étudiant en #NouvelleCaledonie a exploité les données ouvertes de Prix.nc :
+•	Détection automatique d'anomalies de prix (ex: yaourt à 84M de francs 🤯, cassoulet à 500 francs !).
+•	Construction de paniers idéals (économique, équilibré, local/importé).
+•	Constat clé : manger sain coûte systématiquement plus cher 💰 et l'offre locale peut être limitée.
+•	Ce travail souligne l'importance cruciale de la #PréparationDesDonnées et de la #Collaboration en équipe.
+La #DataScience a un impact concret sur les enjeux locaux ! #ProjetUNC #MIAGE2025
