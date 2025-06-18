@@ -1,0 +1,5 @@
+🔍 Envie de savoir comment des données brutes deviennent exploitables ?
+Voici le projet prix.nc avec la team Dataprep réalisé dans le cadre du Master MIAGE !
+On vous montre comment on a collecté, nettoyé et structuré les données avec soin, depuis l’API jusqu’au dataset final.
+📊 Au programme : Python, DuckDB, notebooks intelligents et demandes métiers sur mesure.
+🎓 Une présentation par Cassandra Lamataki, étudiante en Master MIAGE à l’Université de la Nouvelle-Calédonie.
