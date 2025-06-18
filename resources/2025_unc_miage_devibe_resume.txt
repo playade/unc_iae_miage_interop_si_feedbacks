@@ -1,0 +1,5 @@
+Un projet étudiant en Nouvelle-Calédonie a analysé les données ouvertes de Prix.nc pour aider les Calédoniens. 
+L'équipe a développé la détection automatique d'anomalies de prix (ex: yaourt à 84M de francs, cassoulet à 500 francs) et la construction de paniers idéals (économique, équilibré, local/importé). 
+Le projet a prouvé que manger sain a un coût supplémentaire et que l'offre locale est parfois limitée. 
+Il a également mis en avant l'importance cruciale de la préparation des données et de la collaboration d'équipe. 
+Ce travail illustre la puissance de l'analyse de données pour des enjeux locaux concrets.
